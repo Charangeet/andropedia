@@ -1,4 +1,4 @@
-# ClubPulse – Build Roadmap
+# ANDROPEDIA – Build Roadmap
 
 Club Performance & Engagement Analytics Dashboard
 Stack: React + Node/Express + PostgreSQL | Timeline: Hackathon (24–48 hrs)

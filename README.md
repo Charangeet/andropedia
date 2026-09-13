@@ -1,4 +1,4 @@
-# ClubPulse
+# ANDROPEDIA
 
 Club Performance & Engagement Analytics Dashboard. See `roadmap.md` for the build plan and `API_CONTRACT.md` for the API spec.
 
@@ -44,7 +44,7 @@ Afterwards, seed the demo data once from the service's shell:
 
 **Frontend → Vercel.** Import the repo with **Root Directory** set to `client`.
 Set `VITE_API_URL` to the Render service URL (e.g.
-`https://clubpulse-api.onrender.com`, no trailing slash). `client/vercel.json`
+`https://andropedia-api.onrender.com`, no trailing slash). `client/vercel.json`
 adds the SPA rewrite so deep links like `/members/12` work on refresh.
 
 Finally, set `CORS_ORIGIN` on the Render service to the Vercel URL and redeploy.

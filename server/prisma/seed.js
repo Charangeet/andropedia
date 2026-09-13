@@ -39,7 +39,7 @@ function pick(arr) {
 const CAST = [
   {
     name: 'Priya Raghavan',
-    email: 'priya.raghavan@club.org',
+    email: 'priya.raghavan@andropedia.org',
     role: 'coordinator',
     attendance: 1,
     taskDone: 1,
@@ -48,7 +48,7 @@ const CAST = [
   },
   {
     name: 'Marcus Chen',
-    email: 'marcus.chen@club.org',
+    email: 'marcus.chen@andropedia.org',
     role: 'coordinator',
     attendance: 0.95,
     taskDone: 0.9,
@@ -57,7 +57,7 @@ const CAST = [
   },
   {
     name: 'Aditya Nair',
-    email: 'aditya.nair@club.org',
+    email: 'aditya.nair@andropedia.org',
     role: 'member',
     attendance: 0.9,
     taskDone: 0.85,
@@ -66,7 +66,7 @@ const CAST = [
   },
   {
     name: 'Hannah Okafor',
-    email: 'hannah.okafor@club.org',
+    email: 'hannah.okafor@andropedia.org',
     role: 'member',
     attendance: 0.35,
     taskDone: 0.4,
@@ -75,7 +75,7 @@ const CAST = [
   },
   {
     name: 'Sofia Almeida',
-    email: 'sofia.almeida@club.org',
+    email: 'sofia.almeida@andropedia.org',
     role: 'member',
     attendance: 0.08,
     taskDone: 0.1,
@@ -84,7 +84,7 @@ const CAST = [
   },
   {
     name: 'Tom Becker',
-    email: 'tom.becker@club.org',
+    email: 'tom.becker@andropedia.org',
     role: 'member',
     attendance: 0.05,
     taskDone: 0,
@@ -181,7 +181,7 @@ async function main() {
     ...FILLER_NAMES.slice(0, FILLER_COUNT).map((name, i) => ({
       ...FILLER_PROFILES[i % FILLER_PROFILES.length],
       name,
-      email: `${name.toLowerCase().replace(/[^a-z]+/g, '.')}@club.org`,
+      email: `${name.toLowerCase().replace(/[^a-z]+/g, '.')}@andropedia.org`,
       role: 'member',
     })),
   ]

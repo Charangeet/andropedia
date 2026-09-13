@@ -11,7 +11,9 @@ export default function Layout() {
     <div className="min-h-screen bg-gray-50">
       <header className="border-b bg-white">
         <div className="max-w-6xl mx-auto px-4 flex items-center gap-3 sm:gap-8 h-14">
-          <span className="font-semibold text-lg shrink-0">ClubPulse</span>
+          <span className="font-semibold text-lg shrink-0 tracking-tight">
+            ANDRO<span className="text-blue-600">PEDIA</span>
+          </span>
           <nav className="flex gap-0.5 sm:gap-1 overflow-x-auto">
             {links.map((link) => (
               <NavLink

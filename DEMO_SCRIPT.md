@@ -1,4 +1,4 @@
-# ClubPulse — 3 Minute Demo Script
+# ANDROPEDIA — 3 Minute Demo Script
 
 **Before you start:** `docker compose up -d`, both dev servers running, browser at
 `http://localhost:5173`, date filter on **All time**. If deployed on Render's free
@@ -14,7 +14,7 @@ The dataset is deterministic, so the numbers below are exactly what you'll see.
 > projects nowhere. So we can't answer two questions that actually matter: who's
 > carrying the club, and who are we about to lose?
 >
-> ClubPulse turns that scattered activity into one number per member."
+> ANDROPEDIA turns that scattered activity into one number per member."
 
 ## 0:20 — Dashboard overview (30s)
 

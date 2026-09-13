@@ -1,4 +1,4 @@
-# ClubPulse API Contract
+# ANDROPEDIA API Contract
 
 Base URL (dev): `http://localhost:4000/api`
 

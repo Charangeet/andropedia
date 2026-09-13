@@ -3,9 +3,9 @@ services:
     image: postgres:16
     restart: unless-stopped
     environment:
-      POSTGRES_USER: clubpulse
-      POSTGRES_PASSWORD: clubpulse
-      POSTGRES_DB: clubpulse
+      POSTGRES_USER: andropedia
+      POSTGRES_PASSWORD: andropedia
+      POSTGRES_DB: andropedia
     ports:
       - "5432:5432"
     volumes:
