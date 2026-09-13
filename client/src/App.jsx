@@ -1,22 +1,20 @@
-import { useEffect, useState } from 'react'
+import { Routes, Route } from 'react-router-dom'
+import Layout from './components/Layout'
+import Dashboard from './pages/Dashboard'
+import Members from './pages/Members'
+import MemberDetail from './pages/MemberDetail'
+import DataEntry from './pages/DataEntry'
 
 function App() {
-  const [status, setStatus] = useState('checking...')
-
-  useEffect(() => {
-    fetch('/api/health')
-      .then((res) => res.json())
-      .then((data) => setStatus(data.status))
-      .catch(() => setStatus('unreachable'))
-  }, [])
-
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-3xl font-semibold">ClubPulse</h1>
-        <p className="mt-2 text-gray-500">API status: {status}</p>
-      </div>
-    </div>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/members" element={<Members />} />
+        <Route path="/members/:id" element={<MemberDetail />} />
+        <Route path="/data-entry" element={<DataEntry />} />
+      </Route>
+    </Routes>
   )
 }
 
