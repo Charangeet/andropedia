@@ -1,13 +1,35 @@
+import { useMemo } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useApi } from '../hooks/useApi'
 import { getMember, getMemberScore } from '../api/members'
-import { Loading, ErrorMessage, Empty } from '../components/StatusMessage'
+import { Loading, ErrorMessage } from '../components/StatusMessage'
 import ScoreBadge from '../components/ScoreBadge'
+import Timeline from '../components/Timeline'
 
 export default function MemberDetail() {
   const { id } = useParams()
   const { data: member, loading, error, refetch } = useApi(() => getMember(id), [id])
   const { data: score } = useApi(() => getMemberScore(id), [id])
+
+  const timelineItems = useMemo(() => {
+    if (!member) return []
+    const attendance = member.attendance.map((a) => ({
+      date: a.date,
+      type: 'Attendance',
+      label: `${a.status === 'present' ? 'Attended' : 'Missed'} ${a.event.name}`,
+    }))
+    const tasks = member.tasks.map((t) => ({
+      date: t.completedDate || t.dueDate || t.id,
+      type: 'Task',
+      label: `${t.title} — ${t.status.replace('_', ' ')}`,
+    }))
+    const contributions = member.contributions.map((c) => ({
+      date: c.date,
+      type: 'Contribution',
+      label: `${c.description} (impact ${c.impactScore})`,
+    }))
+    return [...attendance, ...tasks, ...contributions]
+  }, [member])
 
   if (loading) return <Loading />
   if (error) return <ErrorMessage error={error} onRetry={refetch} />
@@ -41,50 +63,7 @@ export default function MemberDetail() {
         </div>
       )}
 
-      <Section title="Attendance">
-        {member.attendance.length === 0 ? (
-          <Empty label="No attendance records." />
-        ) : (
-          <SimpleTable
-            columns={['Event', 'Status', 'Date']}
-            rows={member.attendance.map((a) => [
-              a.event.name,
-              a.status,
-              new Date(a.date).toLocaleDateString(),
-            ])}
-          />
-        )}
-      </Section>
-
-      <Section title="Tasks">
-        {member.tasks.length === 0 ? (
-          <Empty label="No tasks." />
-        ) : (
-          <SimpleTable
-            columns={['Title', 'Status', 'Due Date']}
-            rows={member.tasks.map((t) => [
-              t.title,
-              t.status,
-              t.dueDate ? new Date(t.dueDate).toLocaleDateString() : '-',
-            ])}
-          />
-        )}
-      </Section>
-
-      <Section title="Contributions">
-        {member.contributions.length === 0 ? (
-          <Empty label="No contributions logged." />
-        ) : (
-          <SimpleTable
-            columns={['Description', 'Impact', 'Date']}
-            rows={member.contributions.map((c) => [
-              c.description,
-              c.impactScore,
-              new Date(c.date).toLocaleDateString(),
-            ])}
-          />
-        )}
-      </Section>
+      <Timeline items={timelineItems} />
     </div>
   )
 }
@@ -94,44 +73,6 @@ function Metric({ label, value }) {
     <div className="bg-white border rounded-lg p-4">
       <dt className="text-sm text-gray-500">{label}</dt>
       <dd className="text-xl font-semibold mt-1">{value}</dd>
-    </div>
-  )
-}
-
-function Section({ title, children }) {
-  return (
-    <div className="mb-8">
-      <h2 className="text-lg font-medium mb-2">{title}</h2>
-      {children}
-    </div>
-  )
-}
-
-function SimpleTable({ columns, rows }) {
-  return (
-    <div className="bg-white border rounded-lg overflow-x-auto">
-      <table className="w-full text-sm">
-        <thead className="bg-gray-50 text-left text-gray-500">
-          <tr>
-            {columns.map((c) => (
-              <th key={c} className="px-4 py-2 font-medium">
-                {c}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row, i) => (
-            <tr key={i} className="border-t">
-              {row.map((cell, j) => (
-                <td key={j} className="px-4 py-2">
-                  {cell}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </div>
   )
 }

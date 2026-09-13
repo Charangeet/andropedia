@@ -45,8 +45,14 @@ async function engagementTrend(req, res) {
   res.json(points)
 }
 
-async function attendanceByEvent(_req, res) {
+async function attendanceByEvent(req, res) {
+  const { from, to } = req.query
+  const dateFilter = {}
+  if (from) dateFilter.gte = new Date(from)
+  if (to) dateFilter.lte = new Date(to)
+
   const events = await prisma.event.findMany({
+    where: Object.keys(dateFilter).length ? { date: dateFilter } : {},
     include: { attendance: true },
     orderBy: { date: 'asc' },
   })
