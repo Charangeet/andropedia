@@ -1,16 +1,19 @@
 import { useMemo } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useApi } from '../hooks/useApi'
-import { getMember, getMemberScore } from '../api/members'
+import { getMember, getMemberScore, getMemberTrend } from '../api/members'
 import { ErrorMessage } from '../components/StatusMessage'
 import { StatCardsSkeleton, TableSkeleton } from '../components/Skeleton'
 import ScoreBadge from '../components/ScoreBadge'
 import Timeline from '../components/Timeline'
+import TrendSparkline from '../components/charts/TrendSparkline'
+import { exportUrl } from '../lib/exportUrl'
 
 export default function MemberDetail() {
   const { id } = useParams()
   const { data: member, loading, error, refetch } = useApi(() => getMember(id), [id])
   const { data: score } = useApi(() => getMemberScore(id), [id])
+  const { data: trend } = useApi(() => getMemberTrend(id), [id])
 
   const timelineItems = useMemo(() => {
     if (!member) return []
@@ -47,9 +50,17 @@ export default function MemberDetail() {
 
   return (
     <div>
-      <Link to="/members" className="text-sm text-mid-gray hover:text-ink">
-        &larr; Back to Members
-      </Link>
+      <div className="flex items-center justify-between">
+        <Link to="/members" className="text-sm text-mid-gray hover:text-ink">
+          &larr; Back to Members
+        </Link>
+        <a
+          href={exportUrl(`/members/${id}/export`)}
+          className="text-sm text-ink underline decoration-hairline underline-offset-2 hover:text-mid-gray"
+        >
+          Export activity (CSV)
+        </a>
+      </div>
 
       <div className="flex items-start justify-between mt-3 mb-8 gap-4 flex-wrap">
         <div className="min-w-0">
@@ -59,12 +70,15 @@ export default function MemberDetail() {
           <p className="text-mid-gray break-all">{member.email}</p>
         </div>
         {score && (
-          <div className="text-right shrink-0">
-            <div className="text-[48px] leading-none font-semibold tracking-[-0.03em] text-ink">
-              {score.score}
-            </div>
-            <div className="mt-2">
-              <ScoreBadge classification={score.classification} />
+          <div className="flex items-center gap-4 shrink-0">
+            <TrendSparkline data={trend} />
+            <div className="text-right">
+              <div className="text-[48px] leading-none font-semibold tracking-[-0.03em] text-ink">
+                {score.score}
+              </div>
+              <div className="mt-2">
+                <ScoreBadge classification={score.classification} />
+              </div>
             </div>
           </div>
         )}

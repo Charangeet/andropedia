@@ -6,5 +6,7 @@ const router = Router()
 router.get('/summary', analytics.summary)
 router.get('/engagement-trend', analytics.engagementTrend)
 router.get('/attendance-by-event', analytics.attendanceByEvent)
+router.get('/compare', analytics.compare)
+router.get('/watchlist', analytics.watchlist)
 
 module.exports = router

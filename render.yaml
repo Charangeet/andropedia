@@ -22,3 +22,10 @@ services:
       # Set to the deployed frontend origin once Vercel gives you a URL.
       - key: CORS_ORIGIN
         sync: false
+      # Coordinator login (Phase 2 auth) — set these in the Render dashboard.
+      - key: COORDINATOR_PASSWORD
+        sync: false
+      - key: SESSION_SECRET
+        sync: false
+      - key: NODE_ENV
+        value: production

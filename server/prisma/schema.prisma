@@ -42,6 +42,12 @@ enum TaskStatus {
   done
 }
 
+enum RsvpResponse {
+  yes
+  no
+  maybe
+}
+
 model Member {
   id            Int            @id @default(autoincrement())
   name          String
@@ -52,6 +58,7 @@ model Member {
   attendance    Attendance[]
   tasks         Task[]
   contributions Contribution[]
+  rsvps         Rsvp[]
 
   @@map("members")
 }
@@ -70,11 +77,13 @@ model Activity {
 }
 
 model Event {
-  id         Int          @id @default(autoincrement())
-  name       String
-  type       EventType
-  date       DateTime
-  attendance Attendance[]
+  id            Int          @id @default(autoincrement())
+  name          String
+  type          EventType
+  date          DateTime
+  checkinToken  String       @unique @default(cuid())
+  attendance    Attendance[]
+  rsvps         Rsvp[]
 
   @@map("events")
 }
@@ -125,4 +134,40 @@ model Contribution {
   date        DateTime @default(now())
 
   @@map("contributions")
+}
+
+model Rsvp {
+  id          Int          @id @default(autoincrement())
+  member      Member       @relation(fields: [memberId], references: [id])
+  memberId    Int
+  event       Event        @relation(fields: [eventId], references: [id])
+  eventId     Int
+  response    RsvpResponse
+  respondedAt DateTime     @default(now())
+
+  @@unique([memberId, eventId])
+  @@map("rsvps")
+}
+
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  action     String
+  entityType String
+  entityId   Int?
+  actor      String
+  summary    String?
+  createdAt  DateTime @default(now())
+
+  @@map("audit_logs")
+}
+
+model EngagementWeight {
+  id                    Int      @id @default(1)
+  attendance            Float    @default(0.4)
+  taskCompletion        Float    @default(0.3)
+  workshopParticipation Float    @default(0.2)
+  contribution          Float    @default(0.1)
+  updatedAt             DateTime @updatedAt
+
+  @@map("engagement_weights")
 }

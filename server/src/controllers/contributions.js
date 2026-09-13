@@ -1,4 +1,6 @@
 const prisma = require('../lib/prisma')
+const { logAudit } = require('../lib/audit')
+const { getActor } = require('../middleware/requireAuth')
 
 async function list(req, res) {
   const { memberId } = req.query
@@ -17,6 +19,13 @@ async function create(req, res) {
   }
   const contribution = await prisma.contribution.create({
     data: { memberId: Number(memberId), description, impactScore: impactScore ?? 0 },
+  })
+  await logAudit({
+    action: 'create',
+    entityType: 'Contribution',
+    entityId: contribution.id,
+    actor: getActor(req),
+    summary: `Logged contribution for member ${contribution.memberId}`,
   })
   res.status(201).json(contribution)
 }

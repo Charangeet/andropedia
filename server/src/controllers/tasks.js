@@ -1,4 +1,6 @@
 const prisma = require('../lib/prisma')
+const { logAudit } = require('../lib/audit')
+const { getActor } = require('../middleware/requireAuth')
 
 async function list(req, res) {
   const { memberId, projectId, status } = req.query
@@ -27,6 +29,13 @@ async function create(req, res) {
       dueDate: dueDate ? new Date(dueDate) : undefined,
     },
   })
+  await logAudit({
+    action: 'create',
+    entityType: 'Task',
+    entityId: task.id,
+    actor: getActor(req),
+    summary: `Created task "${task.title}"`,
+  })
   res.status(201).json(task)
 }
 
@@ -38,6 +47,13 @@ async function update(req, res) {
     data.completedDate = new Date()
   }
   const task = await prisma.task.update({ where: { id }, data })
+  await logAudit({
+    action: 'update',
+    entityType: 'Task',
+    entityId: task.id,
+    actor: getActor(req),
+    summary: `Updated task "${task.title}" (${task.status})`,
+  })
   res.json(task)
 }
 

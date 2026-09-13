@@ -1,10 +1,28 @@
 const prisma = require('../lib/prisma')
 
-const WEIGHTS = {
+const DEFAULT_WEIGHTS = {
   attendance: 0.4,
   taskCompletion: 0.3,
   workshopParticipation: 0.2,
   contribution: 0.1,
+}
+
+async function getWeights() {
+  const existing = await prisma.engagementWeight.findUnique({ where: { id: 1 } })
+  if (existing) return existing
+  return prisma.engagementWeight.create({ data: { id: 1, ...DEFAULT_WEIGHTS } })
+}
+
+function normalizeWeights(weights) {
+  const { attendance, taskCompletion, workshopParticipation, contribution } = weights
+  const sum = attendance + taskCompletion + workshopParticipation + contribution
+  if (sum <= 0) return DEFAULT_WEIGHTS
+  return {
+    attendance: attendance / sum,
+    taskCompletion: taskCompletion / sum,
+    workshopParticipation: workshopParticipation / sum,
+    contribution: contribution / sum,
+  }
 }
 
 function classify(score) {
@@ -23,11 +41,13 @@ function rate(numerator, denominator) {
  * Contribution count is normalized against the highest contribution
  * count among all members in the same window, so score stays 0-100.
  */
-async function computeMemberScore(memberId, { from, to } = {}) {
+async function computeMemberScore(memberId, { from, to, weights } = {}) {
   const dateFilter = {}
   if (from) dateFilter.gte = new Date(from)
   if (to) dateFilter.lte = new Date(to)
   const dateWhere = Object.keys(dateFilter).length ? { date: dateFilter } : {}
+
+  const WEIGHTS = normalizeWeights(weights || (await getWeights()))
 
   const [attendanceRecords, tasks, contributions, maxContributions] = await Promise.all([
     prisma.attendance.findMany({
@@ -95,12 +115,16 @@ async function maxContributionCount({ from, to } = {}) {
 }
 
 async function computeAllScores(options = {}) {
-  const members = await prisma.member.findMany({ select: { id: true } })
-  return Promise.all(members.map((m) => computeMemberScore(m.id, options)))
+  const [members, weights] = await Promise.all([
+    prisma.member.findMany({ select: { id: true } }),
+    options.weights ? Promise.resolve(options.weights) : getWeights(),
+  ])
+  return Promise.all(members.map((m) => computeMemberScore(m.id, { ...options, weights })))
 }
 
 module.exports = {
   computeMemberScore,
   computeAllScores,
   classify,
+  getWeights,
 }

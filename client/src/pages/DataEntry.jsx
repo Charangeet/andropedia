@@ -6,6 +6,7 @@ import { ChartSkeleton, TableSkeleton } from '../components/Skeleton'
 import AttendanceForm from '../components/forms/AttendanceForm'
 import ContributionForm from '../components/forms/ContributionForm'
 import TaskCompletionList from '../components/forms/TaskCompletionList'
+import BulkAttendanceImport from '../components/forms/BulkAttendanceImport'
 
 export default function DataEntry() {
   const { data: members, loading: membersLoading, error: membersError, refetch } = useApi(
@@ -37,6 +38,7 @@ export default function DataEntry() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <AttendanceForm members={members || []} events={events || []} />
         <ContributionForm members={members || []} />
+        <BulkAttendanceImport events={events || []} />
         <div className="lg:col-span-2">
           <TaskCompletionList />
         </div>

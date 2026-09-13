@@ -9,3 +9,5 @@ export const getInactiveMembers = (params) =>
   client.get('/members/inactive', { params }).then((r) => r.data)
 export const getLeaderboard = (params) =>
   client.get('/members/leaderboard', { params }).then((r) => r.data)
+export const getMemberTrend = (id, params) =>
+  client.get(`/members/${id}/trend`, { params }).then((r) => r.data)

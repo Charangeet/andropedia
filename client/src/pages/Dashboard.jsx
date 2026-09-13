@@ -1,14 +1,15 @@
 import { useMemo, useState } from 'react'
 import { useApi } from '../hooks/useApi'
-import { getSummary, getEngagementTrend, getAttendanceByEvent } from '../api/analytics'
+import { getSummary, getEngagementTrend, getAttendanceByEvent, getWatchlist } from '../api/analytics'
 import { listContributions } from '../api/contributions'
-import { ErrorMessage } from '../components/StatusMessage'
+import { ErrorMessage, FirstRun } from '../components/StatusMessage'
 import { StatCardsSkeleton, ChartSkeleton } from '../components/Skeleton'
 import DateRangeFilter from '../components/DateRangeFilter'
 import EngagementTrendChart from '../components/charts/EngagementTrendChart'
 import AttendanceChart from '../components/charts/AttendanceChart'
 import StatusSplitBar from '../components/charts/StatusSplitBar'
 import ContributionLeaderboardChart from '../components/charts/ContributionLeaderboardChart'
+import WatchlistCard from '../components/WatchlistCard'
 
 export default function Dashboard() {
   const [range, setRange] = useState({ from: null, to: null })
@@ -27,6 +28,7 @@ export default function Dashboard() {
   )
 
   const { data: contributions } = useApi(() => listContributions(), [])
+  const { data: watchlist } = useApi(getWatchlist, [])
 
   const topContributors = useMemo(() => {
     if (!contributions) return []
@@ -44,6 +46,17 @@ export default function Dashboard() {
     }
     return [...totals.values()].sort((a, b) => b.totalImpact - a.totalImpact).slice(0, 5)
   }, [contributions, range])
+
+  if (summary && summary.totalMembers === 0) {
+    return (
+      <FirstRun
+        title="No club data yet"
+        description="Add your first members, events, and activity to see engagement analytics here."
+        actionLabel="Go to Data Entry"
+        actionTo="/data-entry"
+      />
+    )
+  }
 
   return (
     <div>
@@ -80,6 +93,7 @@ export default function Dashboard() {
         ) : (
           <ChartSkeleton height={160} />
         )}
+        {watchlist ? <WatchlistCard data={watchlist} /> : <ChartSkeleton height={160} />}
       </div>
     </div>
   )

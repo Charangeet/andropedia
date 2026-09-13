@@ -5,3 +5,5 @@ export const getEngagementTrend = (params) =>
   client.get('/analytics/engagement-trend', { params }).then((r) => r.data)
 export const getAttendanceByEvent = (params) =>
   client.get('/analytics/attendance-by-event', { params }).then((r) => r.data)
+export const getCompare = (params) => client.get('/analytics/compare', { params }).then((r) => r.data)
+export const getWatchlist = () => client.get('/analytics/watchlist').then((r) => r.data)

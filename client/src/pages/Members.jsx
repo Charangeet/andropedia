@@ -2,9 +2,10 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useApi } from '../hooks/useApi'
 import { getLeaderboard } from '../api/members'
-import { ErrorMessage, Empty } from '../components/StatusMessage'
+import { ErrorMessage, Empty, FirstRun } from '../components/StatusMessage'
 import { TableSkeleton } from '../components/Skeleton'
 import ScoreBadge from '../components/ScoreBadge'
+import { exportUrl } from '../lib/exportUrl'
 
 export default function Members() {
   const { data: members, loading, error, refetch } = useApi(getLeaderboard, [])
@@ -19,28 +20,41 @@ export default function Members() {
     )
   }, [members, search])
 
+  if (!loading && !error && members?.length === 0) {
+    return (
+      <FirstRun
+        title="No members yet"
+        description="Add your club's first member to start tracking engagement."
+        actionLabel="Go to Data Entry"
+        actionTo="/data-entry"
+      />
+    )
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6 gap-3 flex-wrap">
         <h1 className="text-[30px] font-semibold tracking-[-0.02em] text-ink">Members</h1>
-        <input
-          type="text"
-          placeholder="Search by name or email..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="bg-canvas rounded-inputs px-3 py-2 text-sm text-ink placeholder:text-mid-gray w-full sm:w-64 focus:outline-none focus:ring-1 focus:ring-hairline"
-        />
+        <div className="flex items-center gap-4">
+          <a
+            href={exportUrl('/members/leaderboard?format=csv')}
+            className="text-sm text-ink underline decoration-hairline underline-offset-2 hover:text-mid-gray whitespace-nowrap"
+          >
+            Export CSV
+          </a>
+          <input
+            type="text"
+            placeholder="Search by name or email..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="bg-canvas rounded-inputs px-3 py-2 text-sm text-ink placeholder:text-mid-gray w-full sm:w-64 focus:outline-none focus:ring-1 focus:ring-hairline"
+          />
+        </div>
       </div>
 
       {loading && <TableSkeleton columns={4} />}
       {error && <ErrorMessage error={error} onRetry={refetch} />}
-      {!loading && !error && filtered.length === 0 && (
-        <Empty
-          label={
-            search ? `No members match "${search}".` : 'No members yet — add some in Data Entry.'
-          }
-        />
-      )}
+      {!loading && !error && filtered.length === 0 && <Empty label={`No members match "${search}".`} />}
 
       {!loading && !error && filtered.length > 0 && (
         <div className="bg-paper border border-hairline rounded-cards shadow-subtle overflow-hidden">
