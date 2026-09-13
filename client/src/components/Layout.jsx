@@ -8,21 +8,21 @@ const links = [
 
 export default function Layout() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="border-b bg-white">
-        <div className="max-w-6xl mx-auto px-4 flex items-center gap-3 sm:gap-8 h-14">
-          <span className="font-semibold text-lg shrink-0 tracking-tight">
-            ANDRO<span className="text-blue-600">PEDIA</span>
+    <div className="min-h-screen bg-canvas">
+      <header className="bg-paper border-b border-hairline">
+        <div className="max-w-6xl mx-auto px-4 flex items-center gap-3 sm:gap-8 h-16">
+          <span className="font-semibold text-[18px] shrink-0 tracking-[-0.025em] text-ink">
+            ANDRO<span className="text-mid-gray">PEDIA</span>
           </span>
-          <nav className="flex gap-0.5 sm:gap-1 overflow-x-auto">
+          <nav className="flex gap-1 overflow-x-auto">
             {links.map((link) => (
               <NavLink
                 key={link.to}
                 to={link.to}
                 end={link.end}
                 className={({ isActive }) =>
-                  `px-2 sm:px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap ${
-                    isActive ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-100'
+                  `px-3 py-2 rounded-buttons text-sm font-medium whitespace-nowrap transition-colors ${
+                    isActive ? 'bg-ink text-surface-alt' : 'text-mid-gray hover:bg-canvas hover:text-ink'
                   }`
                 }
               >
@@ -32,7 +32,7 @@ export default function Layout() {
           </nav>
         </div>
       </header>
-      <main className="max-w-6xl mx-auto px-4 py-6">
+      <main className="max-w-6xl mx-auto px-4 py-8">
         <Outlet />
       </main>
     </div>

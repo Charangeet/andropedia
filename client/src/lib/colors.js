@@ -1,4 +1,5 @@
-// Validated categorical/status palette (light surface) — see dataviz skill.
+// Kept in sync with the CSS tokens in index.css (--color-*) so a chart fill
+// and a UI badge for the same status always match exactly.
 export const CATEGORICAL = {
   blue: '#2a78d6',
   orange: '#eb6834',
@@ -12,16 +13,15 @@ export const CATEGORICAL = {
 
 export const STATUS = {
   good: '#0ca30c',
-  warning: '#fab219',
-  serious: '#ec835a',
+  warning: '#b45400',
   critical: '#d03b3b',
 }
 
 export const INK = {
-  primary: '#0b0b0b',
-  secondary: '#52514e',
-  muted: '#898781',
-  gridline: '#e1e0d9',
-  baseline: '#c3c2b7',
-  surface: '#fcfcfb',
+  primary: '#0a0a0a',
+  secondary: '#171717',
+  muted: '#737373',
+  gridline: '#e5e5e5',
+  baseline: '#e5e5e5',
+  surface: '#ffffff',
 }

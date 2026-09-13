@@ -1,18 +1,18 @@
 export function Loading({ label = 'Loading...' }) {
-  return <p className="text-gray-500 py-8 text-center">{label}</p>
+  return <p className="text-mid-gray py-8 text-center text-sm">{label}</p>
 }
 
 export function ErrorMessage({ error, onRetry }) {
   return (
     <div className="text-center py-8">
-      <p className="text-red-600">
+      <p className="text-ember text-sm">
         {error?.response?.data?.error || error?.message || 'Something went wrong.'}
       </p>
       {onRetry && (
         <button
           type="button"
           onClick={onRetry}
-          className="mt-2 text-sm text-blue-600 underline"
+          className="mt-2 text-sm text-ink underline decoration-hairline underline-offset-2 hover:text-mid-gray"
         >
           Retry
         </button>
@@ -22,5 +22,5 @@ export function ErrorMessage({ error, onRetry }) {
 }
 
 export function Empty({ label = 'Nothing here yet.' }) {
-  return <p className="text-gray-400 py-8 text-center">{label}</p>
+  return <p className="text-mid-gray py-8 text-center text-sm">{label}</p>
 }

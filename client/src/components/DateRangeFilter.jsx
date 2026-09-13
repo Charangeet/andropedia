@@ -38,10 +38,10 @@ export default function DateRangeFilter({ value, onChange }) {
           key={p.label}
           type="button"
           onClick={() => selectPreset(p)}
-          className={`px-3 py-1.5 rounded-md text-sm border ${
+          className={`px-3 py-1.5 rounded-buttons text-sm font-medium transition-colors ${
             preset === p.label
-              ? 'bg-gray-900 text-white border-gray-900'
-              : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+              ? 'bg-ink text-surface-alt'
+              : 'bg-canvas text-mid-gray hover:text-ink'
           }`}
         >
           {p.label}
@@ -53,14 +53,14 @@ export default function DateRangeFilter({ value, onChange }) {
             type="date"
             value={value.from || ''}
             onChange={(e) => onChange({ ...value, from: e.target.value })}
-            className="border rounded-md px-2 py-1"
+            className="bg-canvas rounded-inputs px-2.5 py-1.5 text-ink focus:outline-none focus:ring-1 focus:ring-hairline"
           />
-          <span className="text-gray-400">to</span>
+          <span className="text-mid-gray">to</span>
           <input
             type="date"
             value={value.to || ''}
             onChange={(e) => onChange({ ...value, to: e.target.value })}
-            className="border rounded-md px-2 py-1"
+            className="bg-canvas rounded-inputs px-2.5 py-1.5 text-ink focus:outline-none focus:ring-1 focus:ring-hairline"
           />
         </div>
       )}

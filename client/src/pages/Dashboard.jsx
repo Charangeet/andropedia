@@ -47,27 +47,27 @@ export default function Dashboard() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
-        <h1 className="text-2xl font-semibold">Dashboard</h1>
+      <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+        <h1 className="text-[30px] font-semibold tracking-[-0.02em] text-ink">Dashboard</h1>
         <DateRangeFilter value={range} onChange={setRange} />
       </div>
 
       {summaryError && <ErrorMessage error={summaryError} onRetry={refetchSummary} />}
 
-      <div className="mb-6">
+      <div className="mb-8">
         {summary ? (
-          <dl className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <dl className="grid grid-cols-2 sm:grid-cols-4 gap-6">
             <Stat label="Total Members" value={summary.totalMembers} />
             <Stat label="Avg Engagement" value={summary.avgEngagement} />
-            <Stat label="Active" value={summary.active} />
-            <Stat label="At Risk / Inactive" value={summary.atRisk + summary.inactive} />
+            <Stat label="Active" value={summary.active} tone="good" />
+            <Stat label="At Risk / Inactive" value={summary.atRisk + summary.inactive} tone="warning" />
           </dl>
         ) : (
           !summaryError && <StatCardsSkeleton />
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {trend ? <EngagementTrendChart data={trend} /> : <ChartSkeleton />}
         {attendance ? <AttendanceChart data={attendance} /> : <ChartSkeleton height={260} />}
         {summary ? (
@@ -92,11 +92,15 @@ function rangeParams(range) {
   return params
 }
 
-function Stat({ label, value }) {
+const TONE_COLOR = { good: 'text-good', warning: 'text-warning' }
+
+function Stat({ label, value, tone }) {
   return (
-    <div className="bg-white border rounded-lg p-4">
-      <dt className="text-sm text-gray-500">{label}</dt>
-      <dd className="text-2xl font-semibold mt-1">{value}</dd>
+    <div>
+      <dt className="text-xs uppercase tracking-[0.03em] text-mid-gray">{label}</dt>
+      <dd className={`text-[36px] font-semibold tracking-[-0.02em] mt-1 ${tone ? TONE_COLOR[tone] : 'text-ink'}`}>
+        {value}
+      </dd>
     </div>
   )
 }

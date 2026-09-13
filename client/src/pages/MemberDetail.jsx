@@ -47,25 +47,31 @@ export default function MemberDetail() {
 
   return (
     <div>
-      <Link to="/members" className="text-sm text-blue-600 hover:underline">
+      <Link to="/members" className="text-sm text-mid-gray hover:text-ink">
         &larr; Back to Members
       </Link>
 
-      <div className="flex items-start justify-between mt-2 mb-6 gap-4 flex-wrap">
+      <div className="flex items-start justify-between mt-3 mb-8 gap-4 flex-wrap">
         <div className="min-w-0">
-          <h1 className="text-2xl font-semibold break-words">{member.name}</h1>
-          <p className="text-gray-500 break-all">{member.email}</p>
+          <h1 className="text-[30px] font-semibold tracking-[-0.02em] text-ink break-words">
+            {member.name}
+          </h1>
+          <p className="text-mid-gray break-all">{member.email}</p>
         </div>
         {score && (
           <div className="text-right shrink-0">
-            <div className="text-3xl font-semibold">{score.score}</div>
-            <ScoreBadge classification={score.classification} />
+            <div className="text-[48px] leading-none font-semibold tracking-[-0.03em] text-ink">
+              {score.score}
+            </div>
+            <div className="mt-2">
+              <ScoreBadge classification={score.classification} />
+            </div>
           </div>
         )}
       </div>
 
       {score && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-10">
           <Metric label="Attendance Rate" value={`${score.breakdown.attendanceRate}%`} />
           <Metric label="Task Completion" value={`${score.breakdown.taskCompletionRate}%`} />
           <Metric label="Workshop Participation" value={`${score.breakdown.workshopParticipationRate}%`} />
@@ -80,9 +86,9 @@ export default function MemberDetail() {
 
 function Metric({ label, value }) {
   return (
-    <div className="bg-white border rounded-lg p-4">
-      <dt className="text-sm text-gray-500">{label}</dt>
-      <dd className="text-xl font-semibold mt-1">{value}</dd>
+    <div>
+      <dt className="text-xs uppercase tracking-[0.03em] text-mid-gray">{label}</dt>
+      <dd className="text-[24px] font-semibold tracking-[-0.015em] text-ink mt-1">{value}</dd>
     </div>
   )
 }

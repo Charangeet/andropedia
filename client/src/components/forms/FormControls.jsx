@@ -1,7 +1,7 @@
 export function Field({ label, children }) {
   return (
     <label className="block">
-      <span className="block text-sm text-gray-600 mb-1">{label}</span>
+      <span className="block text-sm text-mid-gray mb-1.5">{label}</span>
       {children}
     </label>
   )
@@ -13,24 +13,22 @@ export function SubmitRow({ state, label }) {
       <button
         type="submit"
         disabled={state.status === 'saving'}
-        className="bg-gray-900 text-white text-sm px-4 py-1.5 rounded-md disabled:opacity-50"
+        className="bg-ink text-surface-alt text-sm font-medium px-4 py-2 rounded-buttons disabled:opacity-50 hover:bg-ink-soft transition-colors"
       >
         {state.status === 'saving' ? 'Saving...' : label}
       </button>
-      {state.status === 'success' && <span className="text-sm text-green-600">Saved.</span>}
-      {state.status === 'error' && <span className="text-sm text-red-600">{state.message}</span>}
+      {state.status === 'success' && <span className="text-sm text-good">Saved.</span>}
+      {state.status === 'error' && <span className="text-sm text-ember">{state.message}</span>}
     </div>
   )
 }
 
+const selectClass =
+  'w-full bg-canvas rounded-inputs px-2.5 py-2 text-sm text-ink focus:outline-none focus:ring-1 focus:ring-hairline'
+
 export function MemberSelect({ members, value, onChange }) {
   return (
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      required
-      className="w-full border rounded-md px-2 py-1.5 text-sm"
-    >
+    <select value={value} onChange={(e) => onChange(e.target.value)} required className={selectClass}>
       <option value="">Select a member...</option>
       {members.map((m) => (
         <option key={m.id} value={m.id}>
@@ -40,3 +38,5 @@ export function MemberSelect({ members, value, onChange }) {
     </select>
   )
 }
+
+export { selectClass }

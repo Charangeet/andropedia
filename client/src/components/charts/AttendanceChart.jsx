@@ -8,7 +8,7 @@ import {
   Tooltip,
   Legend,
 } from 'recharts'
-import { CATEGORICAL, INK } from '../../lib/colors'
+import { INK } from '../../lib/colors'
 
 function truncate(str, n = 14) {
   return str.length > n ? `${str.slice(0, n - 1)}…` : str
@@ -19,16 +19,16 @@ export default function AttendanceChart({ data }) {
 
   if (chartData.length === 0) {
     return (
-      <div className="bg-white border rounded-lg p-4">
-        <h3 className="text-sm font-medium text-gray-700 mb-3">Attendance by event</h3>
-        <p className="text-gray-400 text-sm py-8 text-center">No events in this range.</p>
+      <div className="bg-paper border border-hairline rounded-cards shadow-subtle p-5">
+        <h3 className="text-sm font-medium text-ink-soft mb-3">Attendance by event</h3>
+        <p className="text-mid-gray text-sm py-8 text-center">No events in this range.</p>
       </div>
     )
   }
 
   return (
-    <div className="bg-white border rounded-lg p-4">
-      <h3 className="text-sm font-medium text-gray-700 mb-3">Attendance by event</h3>
+    <div className="bg-paper border border-hairline rounded-cards shadow-subtle p-5">
+      <h3 className="text-sm font-medium text-ink-soft mb-3">Attendance by event</h3>
       <ResponsiveContainer width="100%" height={260}>
         <BarChart data={chartData} margin={{ top: 8, right: 16, left: -16, bottom: 0 }} barGap={2}>
           <CartesianGrid vertical={false} stroke={INK.gridline} />
@@ -48,8 +48,8 @@ export default function AttendanceChart({ data }) {
             labelFormatter={(_label, payload) => payload?.[0]?.payload?.name}
           />
           <Legend wrapperStyle={{ fontSize: 12 }} />
-          <Bar dataKey="present" name="Present" fill={CATEGORICAL.blue} radius={[4, 4, 0, 0]} maxBarSize={24} />
-          <Bar dataKey="absent" name="Absent" fill={CATEGORICAL.orange} radius={[4, 4, 0, 0]} maxBarSize={24} />
+          <Bar dataKey="present" name="Present" fill={INK.secondary} radius={[4, 4, 0, 0]} maxBarSize={24} />
+          <Bar dataKey="absent" name="Absent" fill={INK.muted} radius={[4, 4, 0, 0]} maxBarSize={24} />
         </BarChart>
       </ResponsiveContainer>
     </div>

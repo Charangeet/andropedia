@@ -11,14 +11,14 @@ export default function StatusSplitBar({ active, atRisk, inactive }) {
   const values = { active, atRisk, inactive }
 
   return (
-    <div className="bg-white border rounded-lg p-4">
-      <h3 className="text-sm font-medium text-gray-700 mb-3">Active vs at-risk vs inactive</h3>
+    <div className="bg-paper border border-hairline rounded-cards shadow-subtle p-5">
+      <h3 className="text-sm font-medium text-ink-soft mb-3">Active vs at-risk vs inactive</h3>
 
       {total === 0 ? (
-        <p className="text-gray-400 text-sm">No members yet.</p>
+        <p className="text-mid-gray text-sm">No members yet.</p>
       ) : (
         <>
-          <div className="flex h-6 w-full rounded-md overflow-hidden gap-[2px] bg-[#fcfcfb]">
+          <div className="flex h-6 w-full rounded-small overflow-hidden gap-[2px] bg-canvas">
             {SEGMENTS.map((s) => {
               const pct = (values[s.key] / total) * 100
               if (pct === 0) return null
@@ -39,8 +39,8 @@ export default function StatusSplitBar({ active, atRisk, inactive }) {
                   className="inline-block w-2.5 h-2.5 rounded-full"
                   style={{ backgroundColor: s.color }}
                 />
-                <span className="text-gray-600">{s.label}</span>
-                <span className="font-medium text-gray-900">{values[s.key]}</span>
+                <span className="text-mid-gray">{s.label}</span>
+                <span className="font-medium text-ink">{values[s.key]}</span>
               </div>
             ))}
           </div>

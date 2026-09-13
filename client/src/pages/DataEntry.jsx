@@ -16,7 +16,7 @@ export default function DataEntry() {
 
   if (membersLoading || eventsLoading) {
     return (
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <ChartSkeleton height={140} />
         <ChartSkeleton height={140} />
         <div className="lg:col-span-2">
@@ -29,12 +29,12 @@ export default function DataEntry() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold mb-1">Data Entry</h1>
-      <p className="text-gray-500 mb-6 text-sm">
+      <h1 className="text-[30px] font-semibold tracking-[-0.02em] text-ink mb-1">Data Entry</h1>
+      <p className="text-mid-gray mb-8 text-sm">
         Log club activity here — it feeds straight into engagement scores.
       </p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <AttendanceForm members={members || []} events={events || []} />
         <ContributionForm members={members || []} />
         <div className="lg:col-span-2">

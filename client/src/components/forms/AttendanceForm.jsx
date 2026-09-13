@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { logAttendance } from '../../api/attendance'
-import { Field, SubmitRow, MemberSelect } from './FormControls'
+import { Field, SubmitRow, MemberSelect, selectClass } from './FormControls'
 
 export default function AttendanceForm({ members, events, onSaved }) {
   const [memberId, setMemberId] = useState('')
@@ -22,8 +22,8 @@ export default function AttendanceForm({ members, events, onSaved }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white border rounded-lg p-4 space-y-3">
-      <h2 className="font-medium">Log Attendance</h2>
+    <form onSubmit={handleSubmit} className="bg-paper border border-hairline rounded-cards shadow-subtle p-5 space-y-4">
+      <h2 className="font-semibold text-ink">Log Attendance</h2>
 
       <Field label="Member">
         <MemberSelect members={members} value={memberId} onChange={setMemberId} />
@@ -34,7 +34,7 @@ export default function AttendanceForm({ members, events, onSaved }) {
           value={eventId}
           onChange={(e) => setEventId(e.target.value)}
           required
-          className="w-full border rounded-md px-2 py-1.5 text-sm"
+          className={selectClass}
         >
           <option value="">Select an event...</option>
           {events.map((ev) => (
@@ -46,27 +46,19 @@ export default function AttendanceForm({ members, events, onSaved }) {
       </Field>
 
       <Field label="Status">
-        <div className="flex gap-4 text-sm">
-          <label className="flex items-center gap-1.5">
-            <input
-              type="radio"
-              name="status"
-              value="present"
-              checked={status === 'present'}
-              onChange={() => setStatus('present')}
-            />
-            Present
-          </label>
-          <label className="flex items-center gap-1.5">
-            <input
-              type="radio"
-              name="status"
-              value="absent"
-              checked={status === 'absent'}
-              onChange={() => setStatus('absent')}
-            />
-            Absent
-          </label>
+        <div className="flex gap-2">
+          {['present', 'absent'].map((s) => (
+            <button
+              key={s}
+              type="button"
+              onClick={() => setStatus(s)}
+              className={`px-3 py-1.5 rounded-buttons text-sm font-medium capitalize transition-colors ${
+                status === s ? 'bg-ink text-surface-alt' : 'bg-canvas text-mid-gray hover:text-ink'
+              }`}
+            >
+              {s}
+            </button>
+          ))}
         </div>
       </Field>
 

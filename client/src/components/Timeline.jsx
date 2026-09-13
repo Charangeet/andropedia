@@ -1,12 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Empty } from './StatusMessage'
 
-const TYPE_STYLES = {
-  Attendance: 'bg-blue-50 text-blue-700',
-  Task: 'bg-violet-50 text-violet-700',
-  Contribution: 'bg-emerald-50 text-emerald-700',
-}
-
 export default function Timeline({ items }) {
   const [type, setType] = useState('All')
 
@@ -19,12 +13,12 @@ export default function Timeline({ items }) {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-2">
-        <h2 className="text-lg font-medium">Activity Timeline</h2>
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-[18px] font-semibold text-ink">Activity Timeline</h2>
         <select
           value={type}
           onChange={(e) => setType(e.target.value)}
-          className="border rounded-md px-2 py-1 text-sm"
+          className="bg-canvas rounded-inputs px-2.5 py-1.5 text-sm text-ink focus:outline-none focus:ring-1 focus:ring-hairline"
         >
           {types.map((t) => (
             <option key={t} value={t}>
@@ -37,18 +31,14 @@ export default function Timeline({ items }) {
       {filtered.length === 0 ? (
         <Empty label="No activity in this range." />
       ) : (
-        <ol className="bg-white border rounded-lg divide-y">
+        <ol className="bg-paper border border-hairline rounded-cards shadow-subtle divide-y divide-hairline overflow-hidden">
           {filtered.map((item, i) => (
-            <li key={i} className="px-4 py-3 flex items-center gap-3">
-              <span
-                className={`shrink-0 px-2 py-0.5 rounded-full text-xs font-medium ${
-                  TYPE_STYLES[item.type] || 'bg-gray-100 text-gray-700'
-                }`}
-              >
+            <li key={i} className="px-5 py-3.5 flex items-center gap-3">
+              <span className="shrink-0 px-2 py-0.5 rounded-badges text-xs font-medium bg-canvas text-ink-soft">
                 {item.type}
               </span>
-              <span className="flex-1 text-sm text-gray-800">{item.label}</span>
-              <span className="text-xs text-gray-400 shrink-0">
+              <span className="flex-1 text-sm text-ink">{item.label}</span>
+              <span className="text-xs text-mid-gray shrink-0">
                 {new Date(item.date).toLocaleDateString()}
               </span>
             </li>

@@ -27,8 +27,8 @@ export default function ContributionForm({ members, onSaved }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white border rounded-lg p-4 space-y-3">
-      <h2 className="font-medium">Add Contribution</h2>
+    <form onSubmit={handleSubmit} className="bg-paper border border-hairline rounded-cards shadow-subtle p-5 space-y-4">
+      <h2 className="font-semibold text-ink">Add Contribution</h2>
 
       <Field label="Member">
         <MemberSelect members={members} value={memberId} onChange={setMemberId} />
@@ -41,7 +41,7 @@ export default function ContributionForm({ members, onSaved }) {
           required
           rows={2}
           placeholder="What did they do?"
-          className="w-full border rounded-md px-2 py-1.5 text-sm"
+          className="w-full bg-canvas rounded-inputs px-2.5 py-2 text-sm text-ink placeholder:text-mid-gray focus:outline-none focus:ring-1 focus:ring-hairline"
         />
       </Field>
 
@@ -52,7 +52,7 @@ export default function ContributionForm({ members, onSaved }) {
           max="10"
           value={impactScore}
           onChange={(e) => setImpactScore(e.target.value)}
-          className="w-full"
+          className="w-full accent-ink"
         />
       </Field>
 
