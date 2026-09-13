@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  member
+  coordinator
+}
+
+enum ActivityType {
+  attendance
+  task
+  project
+  workshop
+  contribution
+}
+
+enum AttendanceStatus {
+  present
+  absent
+}
+
+enum EventType {
+  meeting
+  workshop
+}
+
+enum TaskStatus {
+  todo
+  in_progress
+  done
+}
+
+model Member {
+  id            Int            @id @default(autoincrement())
+  name          String
+  email         String         @unique
+  role          Role           @default(member)
+  joinDate      DateTime       @default(now())
+  activities    Activity[]
+  attendance    Attendance[]
+  tasks         Task[]
+  contributions Contribution[]
+
+  @@map("members")
+}
+
+model Activity {
+  id       Int          @id @default(autoincrement())
+  member   Member       @relation(fields: [memberId], references: [id])
+  memberId Int
+  type     ActivityType
+  title    String
+  points   Int          @default(0)
+  date     DateTime     @default(now())
+  notes    String?
+
+  @@map("activities")
+}
+
+model Event {
+  id         Int          @id @default(autoincrement())
+  name       String
+  type       EventType
+  date       DateTime
+  attendance Attendance[]
+
+  @@map("events")
+}
+
+model Attendance {
+  id       Int              @id @default(autoincrement())
+  member   Member           @relation(fields: [memberId], references: [id])
+  memberId Int
+  event    Event            @relation(fields: [eventId], references: [id])
+  eventId  Int
+  status   AttendanceStatus
+  date     DateTime         @default(now())
+
+  @@unique([memberId, eventId])
+  @@map("attendance")
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  startDate   DateTime @default(now())
+  tasks       Task[]
+
+  @@map("projects")
+}
+
+model Task {
+  id            Int        @id @default(autoincrement())
+  member        Member     @relation(fields: [memberId], references: [id])
+  memberId      Int
+  project       Project?   @relation(fields: [projectId], references: [id])
+  projectId     Int?
+  title         String
+  status        TaskStatus @default(todo)
+  dueDate       DateTime?
+  completedDate DateTime?
+
+  @@map("tasks")
+}
+
+model Contribution {
+  id          Int      @id @default(autoincrement())
+  member      Member   @relation(fields: [memberId], references: [id])
+  memberId    Int
+  description String
+  impactScore Int      @default(0)
+  date        DateTime @default(now())
+
+  @@map("contributions")
+}
