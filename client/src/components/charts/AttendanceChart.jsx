@@ -17,6 +17,15 @@ function truncate(str, n = 14) {
 export default function AttendanceChart({ data }) {
   const chartData = data.map((e) => ({ ...e, shortName: truncate(e.name) }))
 
+  if (chartData.length === 0) {
+    return (
+      <div className="bg-white border rounded-lg p-4">
+        <h3 className="text-sm font-medium text-gray-700 mb-3">Attendance by event</h3>
+        <p className="text-gray-400 text-sm py-8 text-center">No events in this range.</p>
+      </div>
+    )
+  }
+
   return (
     <div className="bg-white border rounded-lg p-4">
       <h3 className="text-sm font-medium text-gray-700 mb-3">Attendance by event</h3>

@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react'
 import { useApi } from '../hooks/useApi'
 import { getSummary, getEngagementTrend, getAttendanceByEvent } from '../api/analytics'
 import { listContributions } from '../api/contributions'
-import { Loading, ErrorMessage } from '../components/StatusMessage'
+import { ErrorMessage } from '../components/StatusMessage'
+import { StatCardsSkeleton, ChartSkeleton } from '../components/Skeleton'
 import DateRangeFilter from '../components/DateRangeFilter'
 import EngagementTrendChart from '../components/charts/EngagementTrendChart'
 import AttendanceChart from '../components/charts/AttendanceChart'
@@ -14,22 +15,18 @@ export default function Dashboard() {
 
   const {
     data: summary,
-    loading: summaryLoading,
     error: summaryError,
     refetch: refetchSummary,
   } = useApi(() => getSummary(rangeParams(range)), [range.from, range.to])
 
-  const { data: trend, loading: trendLoading } = useApi(() => getEngagementTrend({ months: 6 }), [])
+  const { data: trend } = useApi(() => getEngagementTrend({ months: 6 }), [])
 
-  const { data: attendance, loading: attendanceLoading } = useApi(
+  const { data: attendance } = useApi(
     () => getAttendanceByEvent(rangeParams(range)),
     [range.from, range.to]
   )
 
-  const { data: contributions, loading: contributionsLoading } = useApi(
-    () => listContributions(),
-    []
-  )
+  const { data: contributions } = useApi(() => listContributions(), [])
 
   const topContributors = useMemo(() => {
     if (!contributions) return []
@@ -48,8 +45,6 @@ export default function Dashboard() {
     return [...totals.values()].sort((a, b) => b.totalImpact - a.totalImpact).slice(0, 5)
   }, [contributions, range])
 
-  const loading = summaryLoading || trendLoading || attendanceLoading || contributionsLoading
-
   return (
     <div>
       <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
@@ -58,24 +53,33 @@ export default function Dashboard() {
       </div>
 
       {summaryError && <ErrorMessage error={summaryError} onRetry={refetchSummary} />}
-      {loading && !summary && <Loading />}
 
-      {summary && (
-        <dl className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-          <Stat label="Total Members" value={summary.totalMembers} />
-          <Stat label="Avg Engagement" value={summary.avgEngagement} />
-          <Stat label="Active" value={summary.active} />
-          <Stat label="At Risk / Inactive" value={summary.atRisk + summary.inactive} />
-        </dl>
-      )}
+      <div className="mb-6">
+        {summary ? (
+          <dl className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <Stat label="Total Members" value={summary.totalMembers} />
+            <Stat label="Avg Engagement" value={summary.avgEngagement} />
+            <Stat label="Active" value={summary.active} />
+            <Stat label="At Risk / Inactive" value={summary.atRisk + summary.inactive} />
+          </dl>
+        ) : (
+          !summaryError && <StatCardsSkeleton />
+        )}
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {trend && <EngagementTrendChart data={trend} />}
-        {attendance && <AttendanceChart data={attendance} />}
-        {summary && (
+        {trend ? <EngagementTrendChart data={trend} /> : <ChartSkeleton />}
+        {attendance ? <AttendanceChart data={attendance} /> : <ChartSkeleton height={260} />}
+        {summary ? (
           <StatusSplitBar active={summary.active} atRisk={summary.atRisk} inactive={summary.inactive} />
+        ) : (
+          <ChartSkeleton height={80} />
         )}
-        <ContributionLeaderboardChart data={topContributors} />
+        {contributions ? (
+          <ContributionLeaderboardChart data={topContributors} />
+        ) : (
+          <ChartSkeleton height={160} />
+        )}
       </div>
     </div>
   )

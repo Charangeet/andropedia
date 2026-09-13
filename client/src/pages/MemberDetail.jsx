@@ -2,7 +2,8 @@ import { useMemo } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useApi } from '../hooks/useApi'
 import { getMember, getMemberScore } from '../api/members'
-import { Loading, ErrorMessage } from '../components/StatusMessage'
+import { ErrorMessage } from '../components/StatusMessage'
+import { StatCardsSkeleton, TableSkeleton } from '../components/Skeleton'
 import ScoreBadge from '../components/ScoreBadge'
 import Timeline from '../components/Timeline'
 
@@ -31,7 +32,16 @@ export default function MemberDetail() {
     return [...attendance, ...tasks, ...contributions]
   }, [member])
 
-  if (loading) return <Loading />
+  if (loading) {
+    return (
+      <div>
+        <StatCardsSkeleton />
+        <div className="mt-6">
+          <TableSkeleton columns={3} />
+        </div>
+      </div>
+    )
+  }
   if (error) return <ErrorMessage error={error} onRetry={refetch} />
   if (!member) return null
 
@@ -41,13 +51,13 @@ export default function MemberDetail() {
         &larr; Back to Members
       </Link>
 
-      <div className="flex items-center justify-between mt-2 mb-6">
-        <div>
-          <h1 className="text-2xl font-semibold">{member.name}</h1>
-          <p className="text-gray-500">{member.email}</p>
+      <div className="flex items-start justify-between mt-2 mb-6 gap-4 flex-wrap">
+        <div className="min-w-0">
+          <h1 className="text-2xl font-semibold break-words">{member.name}</h1>
+          <p className="text-gray-500 break-all">{member.email}</p>
         </div>
         {score && (
-          <div className="text-right">
+          <div className="text-right shrink-0">
             <div className="text-3xl font-semibold">{score.score}</div>
             <ScoreBadge classification={score.classification} />
           </div>

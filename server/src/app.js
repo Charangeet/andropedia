@@ -12,7 +12,8 @@ const analyticsRouter = require('./routes/analytics')
 
 const app = express()
 
-app.use(cors())
+// Set CORS_ORIGIN in production to restrict to the deployed frontend.
+app.use(cors(process.env.CORS_ORIGIN ? { origin: process.env.CORS_ORIGIN } : {}))
 app.use(express.json())
 
 app.get('/api/health', (_req, res) => {

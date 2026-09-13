@@ -10,6 +10,15 @@ import {
 import { CATEGORICAL, INK } from '../../lib/colors'
 
 export default function EngagementTrendChart({ data }) {
+  if (data.length === 0) {
+    return (
+      <div className="bg-white border rounded-lg p-4">
+        <h3 className="text-sm font-medium text-gray-700 mb-3">Engagement trend</h3>
+        <p className="text-gray-400 text-sm py-8 text-center">Not enough history yet.</p>
+      </div>
+    )
+  }
+
   return (
     <div className="bg-white border rounded-lg p-4">
       <h3 className="text-sm font-medium text-gray-700 mb-3">Engagement trend</h3>
